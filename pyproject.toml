@@ -1,0 +1,13 @@
+[project]
+name = "appifyecommerce"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django-extensions>=4.1",
+    "django-filter>=25.2",
+    "django>=6.0.2",
+    "djangorestframework>=3.16.1",
+    "markdown>=3.10.1",
+]
