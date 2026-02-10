@@ -1,7 +1,8 @@
 from django.contrib import admin
 
-from users.mixins import AdminRoleMixin
+from accounts.mixins import AdminRoleMixin
 from .models import Product
+
 
 @admin.register(Product)
 class ProductAdmin(AdminRoleMixin, admin.ModelAdmin):

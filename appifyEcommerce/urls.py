@@ -20,7 +20,7 @@ router.register(r'orders', OrderViewSet)
 router.register(r'order-items', OrderItemViewSet)
 
 urlpatterns = [
+    path('auth/', include('accounts.urls')),
     path('', include(router.urls)),
-    path('admin/', admin.site.urls),
-    path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('admin/', admin.site.urls)
 ]
