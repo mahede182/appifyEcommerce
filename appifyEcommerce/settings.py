@@ -80,7 +80,7 @@ TEMPLATES = [
     },
 ]
 
-ALLOWED_HOSTS = ['hub182.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['https://hub182.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 WSGI_APPLICATION = 'appifyEcommerce.wsgi.application'
 
