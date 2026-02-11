@@ -25,9 +25,6 @@ SECRET_KEY = 'django-insecure-3wj88bysg-kn83qq(lrdn1&iqrdl(b+o6rip*&xtx(gov0zzqq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://hub182.pythonanywhere.com', 'localhost', '127.0.0.1']
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -81,7 +78,7 @@ TEMPLATES = [
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://hub182.pythonanywhere.com']
-
+ALLOWED_HOSTS = ['https://hub182.pythonanywhere.com']
 WSGI_APPLICATION = 'appifyEcommerce.wsgi.application'
 
 
