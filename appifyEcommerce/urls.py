@@ -1,14 +1,16 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from drf_spectacular.openapi import AutoSchema
 
 from appifyEcommerce.api.viewsets import (
-    CartItemViewSet,
-    CartViewSet,
-    OrderItemViewSet,
-    OrderViewSet,
-    ProductViewSet,
     UserViewSet,
+    ProductViewSet,
+    CartViewSet,
+    CartItemViewSet,
+    OrderViewSet,
+    OrderItemViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -20,7 +22,20 @@ router.register(r'orders', OrderViewSet)
 router.register(r'order-items', OrderItemViewSet)
 
 urlpatterns = [
+    # API Documentation
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    
+    # Authentication
+    path('auth/', include('accounts.urls')),
+    
+    # Cart operations
+    path('cart/', include('cart.urls')),
+    
+    # API endpoints
     path('', include(router.urls)),
-    path('admin/', admin.site.urls),
-    path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    
+    # Admin
+    path('admin/', admin.site.urls)
 ]
