@@ -195,4 +195,13 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'user', 'total_price', 'status', 'created_at', 'items']
-        read_only_fields = ['user']
+        read_only_fields = ['user', 'total_price', 'status', 'created_at', 'items']
+
+
+class PlaceOrderItemSerializer(serializers.Serializer):
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
+    quantity = serializers.IntegerField(min_value=1)
+
+
+class PlaceOrderSerializer(serializers.Serializer):
+    items = PlaceOrderItemSerializer(many=True)

@@ -1,9 +1,12 @@
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from django.db import transaction
 from django.core.exceptions import ValidationError
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
+from decimal import Decimal
 
 from cart.models import Cart, CartItem
 from orders.models import Order, OrderItem
@@ -14,6 +17,7 @@ from .serializers import (
     CartSerializer,
     OrderItemSerializer,
     OrderSerializer,
+    PlaceOrderSerializer,
     ProductSerializer,
     UserSerializer,
 )
@@ -292,6 +296,105 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        return Response(
+            {
+                'success': False,
+                'message': 'Use the place-order endpoint to create orders.',
+                'errors': {'detail': 'POST /api/orders/place-order/'}
+            },
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
+
+    @extend_schema(
+        summary="Place Order",
+        description=(
+            "Create an order from a list of items. Validates stock, calculates total_price on the backend, "
+            "and deducts stock only if the order is successfully created. Uses transaction.atomic and row locks "
+            "to prevent overselling."
+        ),
+        tags=["Orders"],
+        request=PlaceOrderSerializer,
+        responses={
+            201: OrderSerializer,
+            400: OpenApiTypes.OBJECT,
+            401: OpenApiTypes.OBJECT,
+            403: OpenApiTypes.OBJECT,
+        },
+        examples=[
+            OpenApiExample(
+                "Place Order Example",
+                value={
+                    "items": [
+                        {"product": 1, "quantity": 2},
+                        {"product": 5, "quantity": 1}
+                    ]
+                },
+                request_only=True,
+            )
+        ],
+    )
+    @action(detail=False, methods=['post'], url_path='place-order')
+    def place_order(self, request):
+        serializer = PlaceOrderSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        items = serializer.validated_data.get('items', [])
+        if not items:
+            return Response(
+                {
+                    'success': False,
+                    'message': 'No items provided',
+                    'errors': {'items': 'This field is required.'}
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        with transaction.atomic():
+            locked_products = {}
+            total_price = Decimal('0.00')
+
+            for item in items:
+                product = item['product']
+                quantity = item['quantity']
+
+                locked_product = Product.objects.select_for_update().get(id=product.id)
+                locked_products[locked_product.id] = locked_product
+
+                if not locked_product.is_in_stock(quantity):
+                    return Response(
+                        {
+                            'success': False,
+                            'message': 'Insufficient stock',
+                            'errors': {
+                                'product': locked_product.id,
+                                'available_stock': locked_product.available_stock,
+                                'requested_quantity': quantity,
+                            },
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                total_price += (locked_product.price * quantity)
+
+            order = Order.objects.create(user=request.user, total_price=total_price, status='pending')
+
+            for item in items:
+                locked_product = locked_products[item['product'].id]
+                quantity = item['quantity']
+
+                OrderItem.objects.create(
+                    order=order,
+                    product=locked_product,
+                    quantity=quantity,
+                    price_at_purchase=locked_product.price,
+                )
+
+                locked_product.stock_quantity = locked_product.stock_quantity - quantity
+                locked_product.save(update_fields=['stock_quantity'])
+
+            return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
 
 
 class OrderItemViewSet(viewsets.ModelViewSet):
