@@ -78,7 +78,7 @@ TEMPLATES = [
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://hub182.pythonanywhere.com']
-ALLOWED_HOSTS = ['https://hub182.pythonanywhere.com','127.0.0.1']
+ALLOWED_HOSTS = ['https://hub182.pythonanywhere.com','http://hub182.pythonanywhere.com','127.0.0.1']
 WSGI_APPLICATION = 'appifyEcommerce.wsgi.application'
 
 
