@@ -1,8 +1,6 @@
-from django.contrib import admin
-from django.urls import path, include
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from rest_framework import routers, serializers, viewsets
+from rest_framework import serializers
 from django.core.exceptions import ValidationError
 
 from products.models import Product
@@ -10,20 +8,6 @@ from cart.models import Cart, CartItem
 from orders.models import Order, OrderItem
 
 User = get_user_model()
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'password', 'role']
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        password = validated_data.pop('password')
-        user = User(**validated_data)
-        user.set_password(password)
-        user.save()
-        return user
-
 
 class ProductSerializer(serializers.ModelSerializer):
     available_stock = serializers.ReadOnlyField()

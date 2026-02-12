@@ -19,16 +19,9 @@ from .serializers import (
     OrderSerializer,
     PlaceOrderSerializer,
     ProductSerializer,
-    UserSerializer,
 )
 
 User = get_user_model()
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = get_user_model().objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsAdmin]
 
 
 class ProductViewSet(viewsets.ModelViewSet):

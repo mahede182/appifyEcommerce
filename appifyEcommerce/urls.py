@@ -5,7 +5,6 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, Sp
 from drf_spectacular.openapi import AutoSchema
 
 from appifyEcommerce.api.viewsets import (
-    UserViewSet,
     ProductViewSet,
     CartViewSet,
     CartItemViewSet,
@@ -14,7 +13,6 @@ from appifyEcommerce.api.viewsets import (
 )
 
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
 router.register(r'products', ProductViewSet)
 router.register(r'cart', CartViewSet)
 router.register(r'cart-items', CartItemViewSet)

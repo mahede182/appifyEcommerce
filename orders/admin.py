@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Order, OrderItem
-from users.mixins import AdminRoleMixin
+from accounts.mixins import AdminRoleMixin
 
 class OrderItemInline(AdminRoleMixin, admin.TabularInline):
     model = OrderItem

@@ -2,6 +2,8 @@
 
 A comprehensive Django REST API e-commerce platform with robust inventory management, role-based authentication, and real-time stock tracking.
 
+## Live : https://hub182.pythonanywhere.com/
+
 ## 🚀 Features
 
 - 🔐 **Authentication & Authorization**: JWT-based auth with role-based access control (Admin/Customer)

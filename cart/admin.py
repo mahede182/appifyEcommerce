@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from users.mixins import AdminRoleMixin
+from accounts.mixins import AdminRoleMixin
 from .models import Cart, CartItem
 
 class CartItemInline(AdminRoleMixin, admin.TabularInline):
