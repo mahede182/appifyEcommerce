@@ -1,0 +1,27 @@
+# Django E-commerce Platform Requirements
+# Generated from pyproject.toml dependencies
+
+# Core Django
+django==6.0.2
+djangorestframework==3.16.1
+
+# Authentication
+djangorestframework-simplejwt==5.5.1
+
+# API Documentation
+drf-spectacular==0.29.0
+
+# CORS and Extensions
+django-cors-headers==4.9.0
+django-extensions==4.1
+django-filter==25.2
+
+# Documentation Rendering
+markdown==3.10.1
+
+# Database (optional - uncomment if using PostgreSQL)
+# psycopg2-binary==2.9.7
+
+# Development Tools (optional - uncomment for development)
+# django-debug-toolbar==4.2.0
+# django-silk==5.0.4

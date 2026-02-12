@@ -23,7 +23,8 @@ A comprehensive Django REST API e-commerce platform with robust inventory manage
 - **Security**: django-cors-headers 4.9.0
 
 ### Development Tools
-- **Package Manager**: UV
+- **Package Manager**: pip (standard)
+- **Virtual Environment**: venv (built-in)
 - **Python**: 3.12+
 - **Environment**: Development/Production ready
 
@@ -31,7 +32,7 @@ A comprehensive Django REST API e-commerce platform with robust inventory manage
 
 ### Prerequisites
 - Python 3.12 or higher
-- UV package manager
+- pip package manager
 - Git
 
 ### Installation
@@ -42,33 +43,45 @@ A comprehensive Django REST API e-commerce platform with robust inventory manage
    cd appifyEcommerce
    ```
 
-2. **Install dependencies**
+2. **Create and activate virtual environment**
    ```bash
-   uv sync
-   ```
-
-3. **Environment setup**
-   ```bash
+   # Create virtual environment
+   python -m venv venv
+   
    # Activate virtual environment
-   source .venv/bin/activate  # Linux/Mac
-   # or
-   .venv\Scripts\activate     # Windows
+   # On Windows
+   venv\Scripts\activate
+   # On Linux/Mac
+   source venv/bin/activate
    ```
 
-4. **Database migrations**
+3. **Install dependencies**
    ```bash
-   uv run python manage.py makemigrations
-   uv run python manage.py migrate
+   pip install -r requirements.txt
    ```
 
-5. **Create superuser (optional)**
+4. **Environment setup**
    ```bash
-   uv run python manage.py createsuperuser
+   # Create .env file (copy from .env.example if available)
+   echo "SECRET_KEY=your-secret-key-here" > .env
+   echo "DEBUG=True" >> .env
+   echo "ALLOWED_HOSTS=localhost,127.0.0.1" >> .env
    ```
 
-6. **Run development server**
+5. **Database migrations**
    ```bash
-   uv run python manage.py runserver
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+
+6. **Create superuser (optional)**
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+7. **Run development server**
+   ```bash
+   python manage.py runserver
    ```
 
 ### Environment Variables

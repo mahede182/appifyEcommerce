@@ -16,42 +16,39 @@ help:
 	@echo "  make clean          - Clean cache files"
 
 install:
-	uv sync --locked
+	pip install -r requirements.txt
 
 dev:
-	uv run python manage.py runserver
+	python manage.py runserver
 
 migrate:
-	uv run python manage.py migrate
+	python manage.py migrate
 
 makemigrations:
-	uv run python manage.py makemigrations
+	python manage.py makemigrations
 
 shell:
-	uv run python manage.py shell
+	python manage.py shell
 
 test:
-	uv run pytest
+	python manage.py test
 
 lint:
-	uv run ruff check .
+	ruff check .
 
 format:
-	uv run ruff format .
+	ruff format .
 
 superuser:
-	uv run python manage.py createsuperuser
+	python manage.py createsuperuser
 
 export:
-	@echo "Exporting dependencies to requirements/..."
-	uv export --no-hashes --no-dev > requirements/base.txt
-	uv export --no-hashes > requirements/local.txt
-	echo "-r base.txt" > requirements/production.txt
-	@echo "✓ Dependencies exported successfully!"
+	@echo "Dependencies already in requirements.txt"
+	@echo "✓ Requirements file ready!"
 
 schema:
 	@mkdir -p schema
-	uv run python manage.py spectacular --color --file schema/openapi.yaml
+	python manage.py spectacular --color --file schema/openapi.yaml
 	@echo "✓ OpenAPI schema generated at schema/openapi.yaml"
 
 clean:
