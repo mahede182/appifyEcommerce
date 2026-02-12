@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-3wj88bysg-kn83qq(lrdn1&iqrdl(b+o6rip*&xtx(gov0zzqq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Set DEBUG via env var on production (e.g. PythonAnywhere Web tab -> Environment variables)
+DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() in {'1', 'true', 'yes', 'on'}
 
 # Application definition
 
@@ -78,7 +80,8 @@ TEMPLATES = [
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://hub182.pythonanywhere.com']
-ALLOWED_HOSTS = ['https://hub182.pythonanywhere.com','http://hub182.pythonanywhere.com','127.0.0.1']
+# ALLOWED_HOSTS must be hostnames only (no scheme like http:// or https://)
+ALLOWED_HOSTS = ['hub182.pythonanywhere.com', '127.0.0.1', 'localhost']
 WSGI_APPLICATION = 'appifyEcommerce.wsgi.application'
 
 
